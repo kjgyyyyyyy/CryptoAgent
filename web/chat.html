@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoAgent Chat</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
+    .container { max-width: 880px; margin: 0 auto; padding: 24px; }
+    .title { font-size: 24px; margin-bottom: 12px; }
+    .chat { background:#111827; border:1px solid #334155; border-radius:12px; height:62vh; overflow:auto; padding:16px; }
+    .msg { margin:12px 0; white-space: pre-wrap; line-height:1.4; }
+    .you { color:#93c5fd; }
+    .agent { color:#86efac; }
+    .composer { display:flex; gap:8px; margin-top:12px; }
+    textarea { flex:1; min-height:70px; border-radius:8px; border:1px solid #334155; background:#020617; color:#e2e8f0; padding:10px; }
+    button { border:none; border-radius:8px; padding:0 16px; background:#2563eb; color:white; font-weight:600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">CryptoAgent 대화창</div>
+    <div id="chat" class="chat"></div>
+    <div class="composer">
+      <textarea id="query" placeholder="예: ETH와 BMNR 최근 7일 수급/온체인 요약해줘"></textarea>
+      <button id="send">전송</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const query = document.getElementById('query');
+    const sendBtn = document.getElementById('send');
+
+    function addMessage(role, text) {
+      const el = document.createElement('div');
+      el.className = `msg ${role}`;
+      el.textContent = `${role === 'you' ? 'You' : 'Agent'}>\n${text}`;
+      chat.appendChild(el);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function send() {
+      const text = query.value.trim();
+      if (!text) return;
+      query.value = '';
+      addMessage('you', text);
+      addMessage('agent', '분석 중...');
+
+      const loading = chat.lastChild;
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: text })
+        });
+        const payload = await res.json();
+        loading.textContent = `Agent>\n${payload.answer}`;
+      } catch (err) {
+        loading.textContent = `Agent>\n오류가 발생했습니다: ${err}`;
+      }
+    }
+
+    sendBtn.addEventListener('click', send);
+    query.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') send();
+    });
+  </script>
+</body>
+</html>
