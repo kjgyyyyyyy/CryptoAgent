@@ -160,3 +160,43 @@
 ```bash
 python -m cryptoagent.cli "ETH와 BMNR 최근 24시간 요약해줘"
 ```
+
+## 9) 대화창 실행 (로컬)
+
+### A. 터미널 대화 모드
+
+```bash
+python -m cryptoagent.chat_cli
+```
+
+- 종료: `/exit`
+- 예시 질문: `ETH와 BMNR 최근 7일 수급/온체인 요약해줘`
+
+### B. 브라우저 대화창 모드
+
+```bash
+python -m cryptoagent.chat_server --host 127.0.0.1 --port 8000
+```
+
+브라우저에서 `http://127.0.0.1:8000/chat.html` 접속하면 별도 대화창에서 에이전트와 소통할 수 있습니다.
+
+### PowerShell 실행 예시 (Windows)
+
+```powershell
+# 1) 프로젝트 폴더 이동
+Set-Location C:\path\to\CryptoAgent
+
+# 2) (선택) 가상환경 생성/활성화
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# 3) 테스트
+python -m pytest -q
+
+# 4) 터미널 대화 모드
+python -m cryptoagent.chat_cli
+
+# 5) 웹 대화창 모드
+python -m cryptoagent.chat_server --host 127.0.0.1 --port 8000
+# 브라우저에서 http://127.0.0.1:8000/chat.html 열기
+```
