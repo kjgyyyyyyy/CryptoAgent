@@ -141,3 +141,22 @@
 - 리스크
   - 매크로 이벤트(미국 CPI/FOMC) 전 변동성 확대 가능
 
+
+---
+
+## 8) 구현 상태 (현재)
+
+현재 저장소에는 위 설계를 바탕으로 한 **로컬 MVP 코드**가 포함되어 있습니다.
+
+- `cryptoagent/parsing.py`: 질의에서 자산/기간/리포트 타입 파싱
+- `cryptoagent/data_sources.py`: 데모 데이터 수집기 (가격/뉴스/수급/온체인)
+- `cryptoagent/scoring.py`: 중요도 점수 계산 및 등급화
+- `cryptoagent/reporting.py`: 요약/시나리오/액션포인트 리포트 생성
+- `cryptoagent/pipeline.py`: end-to-end 오케스트레이션
+- `cryptoagent/cli.py`: 커맨드라인 실행 진입점
+
+실행 예시:
+
+```bash
+python -m cryptoagent.cli "ETH와 BMNR 최근 24시간 요약해줘"
+```
